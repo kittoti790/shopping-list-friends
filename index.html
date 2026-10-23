@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport-fit=cover нужен, чтобы учитывать вырезы и нижнюю полосу на iPhone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Список покупок</title>
+
+  <!-- Telegram WebApp SDK: даёт доступ к теме, кнопкам и данным запуска -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Клиент Supabase через CDN jsDelivr (версия закреплена намеренно) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Шапка: заголовок, счётчик и кнопка приглашения -->
+  <header class="app-header">
+    <div class="app-header__titles">
+      <h1 class="app-header__title">Список покупок</h1>
+      <p class="app-header__subtitle" id="remaining-counter">Загрузка…</p>
+    </div>
+    <button class="invite-button" id="invite-button" type="button">Пригласить</button>
+  </header>
+
+  <!-- Область списка товаров -->
+  <main class="app-main">
+    <p class="status-message" id="status-message" hidden></p>
+    <ul class="shopping-list" id="shopping-list"></ul>
+    <p class="empty-message" id="empty-message" hidden>
+      Список пуст. Добавьте первый товар внизу.
+    </p>
+  </main>
+
+  <!-- Фиксированная форма ввода внизу экрана -->
+  <form class="add-form" id="add-form" autocomplete="off">
+    <input
+      class="add-form__input"
+      id="item-input"
+      type="text"
+      placeholder="Что купить?"
+      maxlength="120"
+      enterkeyhint="done"
+      aria-label="Название товара"
+    >
+    <button class="add-form__button" type="submit" aria-label="Добавить товар">Добавить</button>
+  </form>
+
+  <script src="app.js"></script>
+</body>
+</html>

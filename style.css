@@ -1,0 +1,261 @@
+/* =====================================================================
+   Стили Mini App «Список покупок».
+   Все цвета берутся из переменных темы Telegram (--tg-theme-*),
+   запасные значения после запятой нужны для проверки в обычном браузере.
+   ===================================================================== */
+
+:root {
+  --color-background: var(--tg-theme-bg-color, #ffffff);
+  --color-text: var(--tg-theme-text-color, #1c1c1e);
+  --color-hint: var(--tg-theme-hint-color, #8e8e93);
+  --color-accent: var(--tg-theme-button-color, #2481cc);
+  --color-accent-text: var(--tg-theme-button-text-color, #ffffff);
+  --color-surface: var(--tg-theme-secondary-bg-color, #f1f1f4);
+  --color-danger: var(--tg-theme-destructive-text-color, #e5484d);
+
+  --radius-control: 12px;
+  --form-height: 72px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* ---------- Шапка ---------- */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-background);
+  border-bottom: 1px solid var(--color-surface);
+}
+
+.app-header__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.app-header__subtitle {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: var(--color-hint);
+}
+
+.invite-button {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.invite-button:active {
+  opacity: 0.8;
+}
+
+/* ---------- Список ---------- */
+
+.app-main {
+  /* Нижний отступ, чтобы последний товар не прятался под формой */
+  padding: 8px 16px calc(var(--form-height) + env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+.shopping-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-surface);
+}
+
+.item__label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 14px 0;
+  cursor: pointer;
+}
+
+/* Настоящий чекбокс скрыт, но остаётся доступным для клавиатуры */
+.item__checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Красивый кастомный чекбокс */
+.item__box {
+  position: relative;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--color-hint);
+  border-radius: 50%;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.item__box::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--color-accent-text);
+  border-width: 0 2.5px 2.5px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.15s ease;
+}
+
+.item__checkbox:checked + .item__box {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.item__checkbox:checked + .item__box::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.item__checkbox:focus-visible + .item__box {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.item__text {
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
+  overflow-wrap: anywhere;
+}
+
+/* Купленный товар: зачёркнут и окрашен в цвет подсказки */
+.item--done .item__text {
+  color: var(--color-hint);
+  text-decoration: line-through;
+}
+
+.item__delete {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-hint);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.item__delete:active {
+  background: var(--color-surface);
+  color: var(--color-danger);
+}
+
+/* ---------- Сообщения ---------- */
+
+.empty-message,
+.status-message {
+  margin: 32px 0;
+  text-align: center;
+  color: var(--color-hint);
+}
+
+.status-message--error {
+  color: var(--color-danger);
+}
+
+/* ---------- Фиксированная форма внизу ---------- */
+
+.add-form {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: var(--color-background);
+  border-top: 1px solid var(--color-surface);
+}
+
+.add-form__input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-text);
+  /* 16 пикселей не даёт iOS приближать страницу при фокусе */
+  font: inherit;
+  font-size: 16px;
+}
+
+.add-form__input::placeholder {
+  color: var(--color-hint);
+}
+
+.add-form__input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.add-form__button {
+  flex-shrink: 0;
+  height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-form__button:active {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item__box,
+  .item__box::after {
+    transition: none;
+  }
+}
